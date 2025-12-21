@@ -1,4 +1,6 @@
-package lsystem
+package examples
+
+import "main/lsystem"
 
 /**
  * AlgaeGrammar has 2 translatables A and B and no actionables
@@ -7,14 +9,14 @@ package lsystem
  */
 type AlgaeGrammar struct {
 	initiator    string
-	translatabes map[rune]translatableRule
-	actionables  map[rune]actionableRule
+	translatabes map[rune]lsystem.TranslatableRule
+	actionables  map[rune]lsystem.ActionableRule
 }
 
 func NewAlgaeGrammar() *AlgaeGrammar {
 	grammar := &AlgaeGrammar{
 		initiator: "A",
-		translatabes: map[rune]translatableRule{
+		translatabes: map[rune]lsystem.TranslatableRule{
 			'A': func() string {
 				return "AB"
 			},
@@ -22,24 +24,24 @@ func NewAlgaeGrammar() *AlgaeGrammar {
 				return "A"
 			},
 		},
-		actionables: make(map[rune]actionableRule),
+		actionables: make(map[rune]lsystem.ActionableRule),
 	}
 
-	if !VerifyIntegrity(grammar) {
+	if !lsystem.VerifyIntegrity(grammar) {
 		return nil
 	}
 
 	return grammar
 }
 
-func (g *AlgaeGrammar) getInitiator() string {
+func (g *AlgaeGrammar) GetInitiator() string {
 	return g.initiator
 }
 
-func (g *AlgaeGrammar) getTranslatables() map[rune]translatableRule {
+func (g *AlgaeGrammar) GetTranslatables() map[rune]lsystem.TranslatableRule {
 	return g.translatabes
 }
 
-func (g *AlgaeGrammar) getActionables() map[rune]actionableRule {
+func (g *AlgaeGrammar) GetActionables() map[rune]lsystem.ActionableRule {
 	return g.actionables
 }

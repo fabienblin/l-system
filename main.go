@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"main/examples"
 	"main/gui"
 	"main/lsystem"
 
@@ -13,7 +14,7 @@ func main() {
 	app := app.New()
 	binder := gui.NewBinder()
 
-	grammar := lsystem.NewAlgaeGrammar()
+	grammar := examples.NewAlgaeGrammar()
 	iterations := lsystem.IterateTranslationOnGrammar(7, grammar)
 	for i := 0; i < 7; i++ {
 		log.Println(iterations[i])

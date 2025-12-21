@@ -1,17 +1,17 @@
 package lsystem
 
-type translatableRule func() string
+type TranslatableRule func() string
 
-type actionableRule func() string
+type ActionableRule func() string
 
-type grammarInterface interface {
-	getInitiator() string
-	getTranslatables() map[rune]translatableRule
-	getActionables() map[rune]actionableRule
+type GrammarInterface interface {
+	GetInitiator() string
+	GetTranslatables() map[rune]TranslatableRule
+	GetActionables() map[rune]ActionableRule
 }
 
-func VerifyIntegrity(g grammarInterface) bool {
-	for _, r := range g.getInitiator() {
+func VerifyIntegrity(g GrammarInterface) bool {
+	for _, r := range g.GetInitiator() {
 		if !isActionableRune(r, g) && !isTranslatableRune(r, g) {
 			return false
 		}
@@ -20,8 +20,8 @@ func VerifyIntegrity(g grammarInterface) bool {
 	return true
 }
 
-func isTranslatableRune(r rune, g grammarInterface) bool {
-	_, translatable := g.getTranslatables()[r]
+func isTranslatableRune(r rune, g GrammarInterface) bool {
+	_, translatable := g.GetTranslatables()[r]
 	if !translatable {
 		return false
 	}
@@ -29,8 +29,8 @@ func isTranslatableRune(r rune, g grammarInterface) bool {
 	return true
 }
 
-func isActionableRune(r rune, g grammarInterface) bool {
-	_, actionable := g.getActionables()[r]
+func isActionableRune(r rune, g GrammarInterface) bool {
+	_, actionable := g.GetActionables()[r]
 	if !actionable {
 		return false
 	}
@@ -38,18 +38,18 @@ func isActionableRune(r rune, g grammarInterface) bool {
 	return true
 }
 
-func IterateTranslationOnGrammar(i int, g grammarInterface) []string {
+func IterateTranslationOnGrammar(i int, g GrammarInterface) []string {
 	tree := make([]string, i)
 
-	previousTranslation := g.getInitiator()
+	previousTranslation := g.GetInitiator()
 	for j := 0; j < i; j++ {
 		translated := ""
 		tree[j] = previousTranslation
 		for _, r := range previousTranslation {
 			if isActionableRune(r, g) {
-				translated += g.getActionables()[r]()
+				translated += g.GetActionables()[r]()
 			} else if isTranslatableRune(r, g) {
-				translated += g.getTranslatables()[r]()
+				translated += g.GetTranslatables()[r]()
 			}
 		}
 		previousTranslation = translated
