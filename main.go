@@ -12,13 +12,18 @@ import (
 
 func main() {
 	app := app.New()
-	binder := gui.NewBinder()
 
-	grammar := examples.NewAlgaeGrammar()
+	grammar, errGrammar := examples.NewAlgaeGrammar()
+	if errGrammar != nil {
+		log.Fatal(errGrammar.Error())
+	}
+
 	iterations := lsystem.IterateTranslationOnGrammar(7, grammar)
 	for i := 0; i < 7; i++ {
 		log.Println(iterations[i])
 	}
+
+	binder := gui.NewBinder(grammar)
 
 	window := gui.BuildMainWindow(app, binder)
 	window.ShowAndRun()

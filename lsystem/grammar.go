@@ -1,5 +1,9 @@
 package lsystem
 
+import (
+	"fmt"
+)
+
 type TranslatableRule func() string
 
 type ActionableRule func() string
@@ -10,14 +14,21 @@ type GrammarInterface interface {
 	GetActionables() map[rune]ActionableRule
 }
 
-func VerifyIntegrity(g GrammarInterface) bool {
+func VerifyIntegrity(g GrammarInterface) error {
 	for _, r := range g.GetInitiator() {
-		if !isActionableRune(r, g) && !isTranslatableRune(r, g) {
-			return false
+		actionable := isActionableRune(r, g)
+		translatable := isTranslatableRune(r, g)
+		if !actionable && !translatable {
+			if !actionable {
+				return fmt.Errorf("this grammar has an erroneous actionable rune %s", string(r))
+			}
+			if !translatable {
+				return fmt.Errorf("this grammar has an erroneous translatable rune %s", string(r))
+			}
 		}
 	}
 
-	return true
+	return nil
 }
 
 func isTranslatableRune(r rune, g GrammarInterface) bool {

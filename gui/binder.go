@@ -4,9 +4,10 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"main/lsystem"
 
 	"fyne.io/fyne/v2/canvas"
-	"github.com/llgcode/draw2d/draw2dimg"
+	"github.com/fogleman/gg"
 )
 
 var (
@@ -18,22 +19,28 @@ const (
 	imageHeight int = 500
 )
 
+/**
+ * A Binder is a method that allows to bind a lsystem grammar to a visual representation
+ */
 type Binder struct {
+	grammar     lsystem.BindableGrammarInterface
 	canvasImage *canvas.Image
 }
 
-func NewBinder() *Binder {
+func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {
 	return &Binder{
-		canvasImage: canvas.NewImageFromImage(drawImage()),
+		grammar:     grammar,
+		canvasImage: canvas.NewImageFromImage(drawImage(grammar)),
 	}
 }
 
 func (b *Binder) OnChangedIterations(iterations float64) {
-	b.canvasImage.Image = drawImage()
+	lsystem.IterateTranslationOnGrammar(int(iterations), b.grammar)
+	b.canvasImage.Image = drawImage(b.grammar)
 	b.canvasImage.Refresh()
 }
 
-func drawImage() *image.RGBA {
+func drawImage(grammar lsystem.BindableGrammarInterface) *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight))
 
 	draw.Draw(
@@ -44,17 +51,11 @@ func drawImage() *image.RGBA {
 		draw.Src,
 	)
 
-	// stroke(img, color.Black, 5, 0,0,500,500)
+	dc := gg.NewContextForRGBA(img)
+	symbolImages := grammar.GetDisplayImages()
+	for r := range grammar.GetTranslatables() {
+		dc.DrawImageAnchored(symbolImages[r], imageWidth/2, imageHeight, 0.5, 0.5)
+	}
 
 	return img
-}
-
-func stroke(image *image.RGBA, c color.Color, width float64, x0 float64, y0 float64, x1 float64, y1 float64) {
-	gc := draw2dimg.NewGraphicContext(image)
-	gc.SetStrokeColor(c)
-	gc.SetLineWidth(width)
-
-	gc.MoveTo(x0, y0)
-	gc.LineTo(x1, y1)
-	gc.Stroke()
 }

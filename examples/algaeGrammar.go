@@ -1,6 +1,11 @@
 package examples
 
-import "main/lsystem"
+import (
+	"image"
+	"main/lsystem"
+
+	"github.com/fogleman/gg"
+)
 
 /**
  * AlgaeGrammar has 2 translatables A and B and no actionables
@@ -11,9 +16,10 @@ type AlgaeGrammar struct {
 	initiator    string
 	translatabes map[rune]lsystem.TranslatableRule
 	actionables  map[rune]lsystem.ActionableRule
+	X, Y float64
 }
 
-func NewAlgaeGrammar() *AlgaeGrammar {
+func NewAlgaeGrammar() (*AlgaeGrammar, error) {
 	grammar := &AlgaeGrammar{
 		initiator: "A",
 		translatabes: map[rune]lsystem.TranslatableRule{
@@ -27,11 +33,11 @@ func NewAlgaeGrammar() *AlgaeGrammar {
 		actionables: make(map[rune]lsystem.ActionableRule),
 	}
 
-	if !lsystem.VerifyIntegrity(grammar) {
-		return nil
+	if errIntegrity := lsystem.VerifyIntegrity(grammar); errIntegrity != nil {
+		return nil, errIntegrity
 	}
 
-	return grammar
+	return grammar, nil
 }
 
 func (g *AlgaeGrammar) GetInitiator() string {
@@ -44,4 +50,29 @@ func (g *AlgaeGrammar) GetTranslatables() map[rune]lsystem.TranslatableRule {
 
 func (g *AlgaeGrammar) GetActionables() map[rune]lsystem.ActionableRule {
 	return g.actionables
+}
+
+func (g *AlgaeGrammar) GetDisplayImages() map[rune]image.Image {
+	displayImages := map[rune]image.Image{
+		'A': imageForA(),
+		'B': imageForB(),
+	}
+
+	return displayImages
+}
+
+func imageForA() image.Image {
+	dc := gg.NewContext(50, 50)
+	dc.DrawCircle(25, 25, 25)
+	dc.SetRGB(0, 0, 1)
+	dc.Fill()
+	return dc.Image()
+}
+
+func imageForB() image.Image {
+	dc := gg.NewContext(50, 50)
+	dc.DrawCircle(25, 25, 25)
+	dc.SetRGB(0, 1, 0)
+	dc.Fill()
+	return dc.Image()
 }
