@@ -1,4 +1,4 @@
-package main
+package gui
 
 import (
 	"image"
@@ -18,19 +18,19 @@ const (
 	imageHeight int = 500
 )
 
-type Lsystem struct {
+type Binder struct {
 	canvasImage *canvas.Image
 }
 
-func NewLsystem() *Lsystem {
-	return &Lsystem{
+func NewBinder() *Binder {
+	return &Binder{
 		canvasImage: canvas.NewImageFromImage(drawImage()),
 	}
 }
 
-func (lsystem *Lsystem) OnChangedIterations(iterations float64) {
-	lsystem.canvasImage.Image = drawImage()
-	lsystem.canvasImage.Refresh()
+func (b *Binder) OnChangedIterations(iterations float64) {
+	b.canvasImage.Image = drawImage()
+	b.canvasImage.Refresh()
 }
 
 func drawImage() *image.RGBA {
@@ -58,4 +58,3 @@ func stroke(image *image.RGBA, c color.Color, width float64, x0 float64, y0 floa
 	gc.LineTo(x1, y1)
 	gc.Stroke()
 }
-

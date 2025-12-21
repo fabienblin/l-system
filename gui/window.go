@@ -1,4 +1,4 @@
-package main
+package gui
 
 import (
 	"fyne.io/fyne/v2"
@@ -7,12 +7,18 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func buildMainWindow(app fyne.App, lsystem *Lsystem) fyne.Window {
+const (
+	windowName   string  = "L System"
+	windowWidth  float32 = 900
+	windowHeight float32 = 600
+)
+
+func BuildMainWindow(app fyne.App, binder *Binder) fyne.Window {
 	window := app.NewWindow(windowName)
 	window.Resize(fyne.NewSize(windowWidth, windowHeight))
 
-	leftPane := buildLeftPaneForm(lsystem)
-	rightPane := buildRightPane(lsystem)
+	leftPane := buildLeftPaneForm(binder)
+	rightPane := buildRightPane(binder)
 
 	split := container.NewHSplit(leftPane, rightPane)
 	split.Offset = 0.2
@@ -22,12 +28,12 @@ func buildMainWindow(app fyne.App, lsystem *Lsystem) fyne.Window {
 	return window
 }
 
-func buildLeftPaneForm(lsystem *Lsystem) fyne.CanvasObject {
+func buildLeftPaneForm(binder *Binder) fyne.CanvasObject {
 	iterationsSlider := widget.NewSlider(1, 10)
 	iterationsSlider.SetValue(1)
 	iterationsSlider.Step = 1
 
-	iterationsSlider.OnChanged = lsystem.OnChangedIterations
+	iterationsSlider.OnChanged = binder.OnChangedIterations
 
 	form := widget.NewForm(
 		widget.NewFormItem("Iterations", iterationsSlider),
@@ -36,8 +42,8 @@ func buildLeftPaneForm(lsystem *Lsystem) fyne.CanvasObject {
 	return container.NewVBox(form)
 }
 
-func buildRightPane(lsystem *Lsystem) fyne.CanvasObject {
-	lsystem.canvasImage.FillMode = canvas.ImageFillStretch
+func buildRightPane(binder *Binder) fyne.CanvasObject {
+	binder.canvasImage.FillMode = canvas.ImageFillStretch
 
-	return container.NewStack(lsystem.canvasImage)
+	return container.NewStack(binder.canvasImage)
 }

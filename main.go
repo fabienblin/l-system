@@ -3,25 +3,22 @@ package main
 import (
 	"log"
 
-	"fyne.io/fyne/v2/app"
-)
+	"main/grammar"
+	"main/gui"
 
-const (
-	windowName   string  = "L System"
-	windowWidth  float32 = 900
-	windowHeight float32 = 600
+	"fyne.io/fyne/v2/app"
 )
 
 func main() {
 	app := app.New()
-	lsystem := NewLsystem()
-	
-	grammar := newAlgaeGrammar()
-	iterations := iterateTranslationOnGrammar(7, grammar)
+	binder := gui.NewBinder()
+
+	algae := grammar.NewAlgaeGrammar()
+	iterations := grammar.IterateTranslationOnGrammar(7, algae)
 	for i := 0; i < 7; i++ {
 		log.Println(iterations[i])
 	}
 
-	window := buildMainWindow(app, lsystem)
+	window := gui.BuildMainWindow(app, binder)
 	window.ShowAndRun()
 }

@@ -1,18 +1,18 @@
-package main
+package grammar
 
 /**
- * algaeGrammar has 2 translatables A and B and no actionables
+ * AlgaeGrammar has 2 translatables A and B and no actionables
  * A translates to AB, and B translates to A
  * initiator is A
  */
-type algaeGrammar struct {
+type AlgaeGrammar struct {
 	initiator    string
 	translatabes map[rune]translatableRule
 	actionables  map[rune]actionableRule
 }
 
-func newAlgaeGrammar() *algaeGrammar {
-	return &algaeGrammar{
+func NewAlgaeGrammar() *AlgaeGrammar {
+	grammar := &AlgaeGrammar{
 		initiator: "A",
 		translatabes: map[rune]translatableRule{
 			'A': func() string {
@@ -24,16 +24,22 @@ func newAlgaeGrammar() *algaeGrammar {
 		},
 		actionables: make(map[rune]actionableRule),
 	}
+
+	if !VerifyIntegrity(grammar) {
+		return nil
+	}
+
+	return grammar
 }
 
-func (g *algaeGrammar) getInitiator() string {
+func (g *AlgaeGrammar) getInitiator() string {
 	return g.initiator
 }
 
-func (g *algaeGrammar) getTranslatables() map[rune]translatableRule {
+func (g *AlgaeGrammar) getTranslatables() map[rune]translatableRule {
 	return g.translatabes
 }
 
-func (g *algaeGrammar) getActionables() map[rune]actionableRule {
+func (g *AlgaeGrammar) getActionables() map[rune]actionableRule {
 	return g.actionables
 }

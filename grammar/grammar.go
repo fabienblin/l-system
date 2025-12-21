@@ -1,4 +1,4 @@
-package main
+package grammar
 
 type translatableRule func() string
 
@@ -10,7 +10,7 @@ type grammarInterface interface {
 	getActionables() map[rune]actionableRule
 }
 
-func verifyIntegrity(g grammarInterface) bool {
+func VerifyIntegrity(g grammarInterface) bool {
 	for _, r := range g.getInitiator() {
 		if !isActionableRune(r, g) && !isTranslatableRune(r, g) {
 			return false
@@ -38,7 +38,7 @@ func isActionableRune(r rune, g grammarInterface) bool {
 	return true
 }
 
-func iterateTranslationOnGrammar(i int, g grammarInterface) []string {
+func IterateTranslationOnGrammar(i int, g grammarInterface) []string {
 	tree := make([]string, i)
 
 	previousTranslation := g.getInitiator()
