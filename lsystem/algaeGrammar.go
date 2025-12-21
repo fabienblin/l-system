@@ -1,4 +1,4 @@
-package grammar
+package lsystem
 
 /**
  * AlgaeGrammar has 2 translatables A and B and no actionables

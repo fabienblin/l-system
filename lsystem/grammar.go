@@ -1,4 +1,4 @@
-package grammar
+package lsystem
 
 type translatableRule func() string
 

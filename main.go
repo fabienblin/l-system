@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"main/grammar"
 	"main/gui"
+	"main/lsystem"
 
 	"fyne.io/fyne/v2/app"
 )
@@ -13,8 +13,8 @@ func main() {
 	app := app.New()
 	binder := gui.NewBinder()
 
-	algae := grammar.NewAlgaeGrammar()
-	iterations := grammar.IterateTranslationOnGrammar(7, algae)
+	grammar := lsystem.NewAlgaeGrammar()
+	iterations := lsystem.IterateTranslationOnGrammar(7, grammar)
 	for i := 0; i < 7; i++ {
 		log.Println(iterations[i])
 	}
