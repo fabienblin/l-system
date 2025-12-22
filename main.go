@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"main/examples"
+	"main/grammar"
 	"main/gui"
 	"main/lsystem"
 
@@ -13,7 +13,7 @@ import (
 func main() {
 	app := app.New()
 
-	grammar, errGrammar := examples.NewAlgaeGrammar()
+	grammar, errGrammar := grammar.NewAlgaeGrammar()
 	if errGrammar != nil {
 		log.Fatal(errGrammar.Error())
 	}
