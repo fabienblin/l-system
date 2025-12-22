@@ -16,7 +16,6 @@ type AlgaeGrammar struct {
 	initiator    string
 	translatabes map[rune]lsystem.TranslatableRule
 	actionables  map[rune]lsystem.ActionableRule
-	X, Y float64
 }
 
 func NewAlgaeGrammar() (*AlgaeGrammar, error) {
