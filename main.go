@@ -5,7 +5,6 @@ import (
 
 	"main/grammar"
 	"main/gui"
-	"main/lsystem"
 
 	"fyne.io/fyne/v2/app"
 )
@@ -13,14 +12,9 @@ import (
 func main() {
 	app := app.New()
 
-	grammar, errGrammar := grammar.NewAlgaeGrammar()
+	grammar, errGrammar := grammar.NewFractalTreeGrammar()
 	if errGrammar != nil {
 		log.Fatal(errGrammar.Error())
-	}
-
-	iterations := lsystem.IterateTranslationOnGrammar(7, grammar)
-	for i := 0; i < 7; i++ {
-		log.Println(iterations[i])
 	}
 
 	binder := gui.NewBinder(grammar)

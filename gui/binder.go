@@ -35,6 +35,7 @@ func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {
 }
 
 func (b *Binder) OnChangedIterations(iterations float64) {
+	b.grammar.SetIterations(int(iterations))
 	lsystem.IterateTranslationOnGrammar(int(iterations), b.grammar)
 	b.canvasImage.Image = drawImage(b.grammar)
 	b.canvasImage.Refresh()
@@ -52,7 +53,7 @@ func drawImage(grammar lsystem.BindableGrammarInterface) *image.RGBA {
 	)
 
 	dc := gg.NewContextForRGBA(img)
-	symbolImages := grammar.GetDisplayImages()
+	symbolImages := grammar.GetSymbolImages()
 	for r := range grammar.GetTranslatables() {
 		dc.DrawImageAnchored(symbolImages[r], imageWidth/2, imageHeight, 0.5, 0.5)
 	}

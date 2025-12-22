@@ -2,16 +2,59 @@ package lsystem
 
 import (
 	"fmt"
+	"image"
 )
 
 type TranslatableRule func() string
+type ActionableRule func()
 
-type ActionableRule func() string
+type Actionable map[rune]ActionableRule
+type Translatable map[rune]TranslatableRule
+type SymbolImage map[rune]image.Image
 
 type GrammarInterface interface {
 	GetInitiator() string
-	GetTranslatables() map[rune]TranslatableRule
-	GetActionables() map[rune]ActionableRule
+	GetTranslatables() Translatable
+	GetActionables() Actionable
+}
+
+/**
+ * Use this strcut by composition to easly implement GrammarInterface
+ */
+type Grammar struct {
+	Initiator     string
+	Translatables Translatable
+	Actionables   Actionable
+}
+
+func NewGrammar(
+	initiator string,
+	translatables Translatable,
+	actionables Actionable,
+) (*Grammar, error) {
+	grammar := &Grammar{
+		Initiator:     initiator,
+		Translatables: translatables,
+		Actionables:   actionables,
+	}
+
+	if errIntegrity := VerifyIntegrity(grammar); errIntegrity != nil {
+		return nil, errIntegrity
+	}
+
+	return grammar, nil
+}
+
+func (g *Grammar) GetInitiator() string {
+	return g.Initiator
+}
+
+func (g *Grammar) GetTranslatables() Translatable {
+	return g.Translatables
+}
+
+func (g *Grammar) GetActionables() Actionable {
+	return g.Actionables
 }
 
 func VerifyIntegrity(g GrammarInterface) error {
@@ -58,7 +101,7 @@ func IterateTranslationOnGrammar(i int, g GrammarInterface) []string {
 		tree[j] = previousTranslation
 		for _, r := range previousTranslation {
 			if isActionableRune(r, g) {
-				translated += g.GetActionables()[r]()
+				g.GetActionables()[r]()
 			} else if isTranslatableRune(r, g) {
 				translated += g.GetTranslatables()[r]()
 			}
