@@ -6,6 +6,7 @@ import (
 	"main/lsystem"
 
 	"fyne.io/fyne/v2/canvas"
+	"github.com/fogleman/gg"
 )
 
 var (
@@ -26,21 +27,29 @@ type Binder struct {
 }
 
 func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {
+	grammar.GetTurtle().Angle = 0.5
+	grammar.GetTurtle().X = float64(imageWidth)/2
+	grammar.GetTurtle().Y = float64(imageHeight)
+	
 	return &Binder{
 		grammar:     grammar,
-		canvasImage: canvas.NewImageFromImage(drawImage(grammar)),
+		canvasImage: canvas.NewImageFromImage(drawImage(grammar, grammar.GetAxiom())),
 	}
 }
 
 func (b *Binder) OnChangedIterations(iterations float64) {
 	b.grammar.SetIterations(int(iterations))
-	lsystem.IterateTranslationOnGrammar(int(iterations), b.grammar)
-	b.canvasImage.Image = drawImage(b.grammar)
+	symbols := lsystem.IterateTranslationOnGrammar(int(iterations), b.grammar)
+	b.canvasImage.Image = drawImage(b.grammar, symbols)
 	b.canvasImage.Refresh()
 }
 
-func drawImage(grammar lsystem.BindableGrammarInterface) *image.RGBA {
-	img := image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight))
+func drawImage(grammar lsystem.BindableGrammarInterface, symbols string) image.Image {
+	drawingContext := gg.NewContext(imageWidth, imageHeight)
 
-	return img
+	for _, symbol := range symbols {
+		grammar.GetRule(symbol).DrawingFunc(grammar.GetTurtle(), drawingContext)
+	}
+
+	return drawingContext.Image()
 }

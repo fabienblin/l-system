@@ -8,6 +8,7 @@ import (
 type GrammarInterface interface {
 	GetAxiom() string
 	GetRule(symbol rune) Rule
+	GetRules() Rules
 }
 
 /**
@@ -33,6 +34,10 @@ func (g *Grammar) GetAxiom() string {
 
 func (g *Grammar) GetRule(symbol rune) Rule {
 	return g.Rules.GetRule(symbol)
+}
+
+func (g *Grammar) GetRules() Rules {
+	return g.Rules
 }
 
 func IterateTranslationOnGrammar(i int, g GrammarInterface) string {

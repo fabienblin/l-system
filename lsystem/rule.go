@@ -2,12 +2,12 @@ package lsystem
 
 import "github.com/fogleman/gg"
 
-type DrawingFunction func(turtle Turtle, ctx *gg.Context)
+type DrawingFunction func(turtle *Turtle, ctx *gg.Context)
 
 type RuleInterface interface {
 	GetRune() rune
 	GetTranslation() string
-	Drawing(turtle Turtle, ctx *gg.Context)
+	// Drawing(turtle *Turtle, ctx *gg.Context)
 }
 
 type Rule struct {
@@ -32,9 +32,9 @@ func (r Rule) GetTranslation() string {
 	return r.Translation
 }
 
-func (r Rule) Drawing(turtle Turtle, ctx *gg.Context) {
-	r.DrawingFunc(turtle, ctx)
-}
+// func (r Rule) Drawing(turtle *Turtle, ctx *gg.Context) {
+// 	r.DrawingFunc(turtle, ctx)
+// }
 
 type Rules map[rune]Rule
 

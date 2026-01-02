@@ -1,17 +1,13 @@
 package lsystem
 
-const (
-	TurtleMoveDistance float64 = 100
-)
-
-type DisplayableInterface interface {
-	GetTurtle() Turtle
-	SetIterations(int)
-}
-
 type BindableGrammarInterface interface {
 	DisplayableInterface
 	GrammarInterface
+}
+
+type DisplayableInterface interface {
+	GetTurtle() *Turtle
+	SetIterations(int)
 }
 
 type Turtle struct {
@@ -22,15 +18,17 @@ type Turtle struct {
  * Use this strcut by composition to easly implement DisplayableInterface
  */
 type Displayable struct {
-	Turtle     Turtle
+	Turtle     *Turtle
 	Iterations int
 }
 
 func NewDisplayable() *Displayable {
-	return &Displayable{}
+	return &Displayable{
+		Turtle: &Turtle{},
+	}
 }
 
-func (d *Displayable) GetTurtle() Turtle {
+func (d *Displayable) GetTurtle() *Turtle {
 	return d.Turtle
 }
 
