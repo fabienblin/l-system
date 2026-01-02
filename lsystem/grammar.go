@@ -16,8 +16,8 @@ type Grammar struct {
 	Rules Rules
 }
 
-func NewGrammar(axiom string, rules Rules) (*Grammar, error) {
-	grammar := &Grammar{
+func NewGrammar(axiom string, rules Rules) (Grammar, error) {
+	grammar := Grammar{
 		Axiom: axiom,
 		Rules: rules,
 	}

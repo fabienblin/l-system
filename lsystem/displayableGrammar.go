@@ -5,18 +5,18 @@ type DisplayableGrammar struct {
 	Displayable
 }
 
-func NewDisplayableGrammar(axiom string, rules ...Rule) (*DisplayableGrammar, error) {
-	g := &DisplayableGrammar{}
-	
+func NewDisplayableGrammar(axiom string, rules ...Rule) (DisplayableGrammar, error) {
+	g := DisplayableGrammar{}
+
 	newRules := NewRules(rules...)
 
 	grammar, err := NewGrammar(axiom, newRules)
 	if err != nil {
-		return nil, err
+		return DisplayableGrammar{}, err
 	}
 
-	g.Grammar = *grammar
-	g.Displayable = *NewDisplayable()
+	g.Grammar = grammar
+	g.Displayable = NewDisplayable()
 
 	return g, nil
 }

@@ -18,8 +18,8 @@ type Displayable struct {
 	Turtle     Turtle
 }
 
-func NewDisplayable() *Displayable {
-	return &Displayable{
+func NewDisplayable() Displayable {
+	return Displayable{
 		Turtle: Turtle{},
 	}
 }

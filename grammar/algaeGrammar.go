@@ -49,7 +49,7 @@ func NewAlgaeGrammar() (*AlgaeGrammar, error) {
 		return nil, errIntegrity
 	}
 
-	algae.DisplayableGrammar = *grammar
+	algae.DisplayableGrammar = grammar
 
 	return algae, nil
 }

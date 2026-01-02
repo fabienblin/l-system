@@ -36,7 +36,7 @@ func NewVineGrammar() (*VineGrammar, error) {
 		return nil, err
 	}
 
-	g.DisplayableGrammar = *grammar
+	g.DisplayableGrammar = grammar
 
 	return g, nil
 }

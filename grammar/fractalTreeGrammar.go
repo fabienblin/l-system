@@ -41,7 +41,7 @@ func NewFractalTreeGrammar() (*FractalTreeGrammar, error) {
 		return nil, errIntegrity
 	}
 
-	fractalTree.DisplayableGrammar = *grammar
+	fractalTree.DisplayableGrammar = grammar
 
 	return fractalTree, nil
 }
