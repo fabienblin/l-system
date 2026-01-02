@@ -9,8 +9,8 @@ import (
 
 const (
 	windowName   string  = "L System"
-	windowWidth  float32 = 900
-	windowHeight float32 = 600
+	windowWidth  float32 = 1200
+	windowHeight float32 = 1200
 	minimumIteration float64 = 0
 	maximumIteration float64 = 9
 )

@@ -1,81 +1,88 @@
 package grammar
 
-// import (
-// 	"image"
-// 	"main/lsystem"
-// 	"math"
+import (
+	"image/color"
+	"main/lsystem"
+	"math"
 
-// 	"github.com/fogleman/gg"
-// )
+	"github.com/fogleman/gg"
+)
 
-// /**
-//  * translatables: 0, 1
-//  * actionables: [, ]
-//  * rules: (1 → 11), (0 → 1[0]0)
-//  * axiom: "0"
-//  */
-// type FractalTreeGrammar struct {
-// 	lsystem.Grammar
-// 	lsystem.Displayable
-// 	stackI int
-// 	stack  []lsystem.Turtle
-// }
+/**
+ * symbols: 0, 1, [, ]
+ * rules: (1 → 11), (0 → 1[0]0), ([ -> left & push), (] -> right & pop)
+ * axiom: "0"
+ */
+type FractalTreeGrammar struct {
+	lsystem.Grammar
+	lsystem.Displayable
+	segmentSize   float64
+	rotationAngle float64
+	stack         []lsystem.Turtle
+}
 
-// func NewFractalTreeGrammar() (*FractalTreeGrammar, error) {
-// 	fractalTree := &FractalTreeGrammar{
-// 		stack: make([]lsystem.Turtle, 0),
-// 	}
+func NewFractalTreeGrammar() (*FractalTreeGrammar, error) {
+	fractalTree := &FractalTreeGrammar{}
+	fractalTree.segmentSize = 5
+	fractalTree.rotationAngle = math.Pi / 4
 
-// 	axiom := "0"
-// 	translatables := lsystem.Translatable{
-// 		'0': func() string { return "1[0]0" },
-// 		'1': func() string { return "11" },
-// 	}
-// 	actionables := lsystem.Actionable{
-// 		'[': fractalTree.funcForPush,
-// 		']': fractalTree.funcForPop,
-// 	}
+	axiom := "0"
 
-// 	grammar, errIntegrity := lsystem.NewGrammar(axiom, translatables, actionables)
-// 	if errIntegrity != nil {
-// 		return nil, errIntegrity
-// 	}
+	rule0 := lsystem.NewRule('0', "1[0]0", fractalTree.Rule0DrawingFunction)
 
-// 	displayables := lsystem.NewDisplayable(
-// 		lsystem.SymbolImage{
-// 			'0': fractalTree.imageFor0(),
-// 			'1': fractalTree.imageFor1(),
-// 		},
-// 	)
+	rule1 := lsystem.NewRule('1', "11", fractalTree.Rule1DrawingFunction)
 
-// 	fractalTree.Grammar = *grammar
-// 	fractalTree.Displayable = *displayables
+	ruleLeft := lsystem.NewRule('[', "[", fractalTree.RuleLeftDrawingFunction)
 
-// 	return fractalTree, nil
-// }
+	ruleRight := lsystem.NewRule(']', "]", fractalTree.RuleRightDrawingFunction)
 
-// func (g *FractalTreeGrammar) imageFor0() image.Image {
-// 	dc := gg.NewContext(50, 50)
-// 	dc.DrawLine(25, 50, 25, 20)
-// 	dc.DrawCircle(25, 10, 10)
-// 	dc.SetRGB(0, 0, 1)
-// 	dc.Fill()
-// 	return dc.Image()
-// }
+	rules := lsystem.NewRules(rule0, rule1, ruleLeft, ruleRight)
 
-// func (g *FractalTreeGrammar) imageFor1() image.Image {
-// 	dc := gg.NewContext(50, 50)
-// 	dc.DrawLine(25, 50, 25, 0)
-// 	dc.SetRGB(0, 0, 1)
-// 	dc.Fill()
-// 	return dc.Image()
-// }
+	grammar, errIntegrity := lsystem.NewGrammar(axiom, rules)
+	if errIntegrity != nil {
+		return nil, errIntegrity
+	}
 
-// func (g *FractalTreeGrammar) funcForPop() {
-// 	g.Turtle.Angle += math.Pi / 4
+	fractalTree.Grammar = *grammar
+	fractalTree.Displayable = *lsystem.NewDisplayable()
 
-// }
+	return fractalTree, nil
+}
 
-// func (g *FractalTreeGrammar) funcForPush() {
-// 	g.Turtle.Angle -= math.Pi / 4
-// }
+func (g *FractalTreeGrammar) forward(ctx *gg.Context) {
+	t := g.GetTurtle()
+
+	nx := t.X + math.Cos(t.Angle)*g.segmentSize
+	ny := t.Y + math.Sin(t.Angle)*g.segmentSize
+
+	ctx.SetColor(color.White)
+	ctx.DrawLine(t.X, t.Y, nx, ny)
+	ctx.Stroke()
+
+	t.X, t.Y = nx, ny
+	g.SetTurtle(t)
+}
+
+func (g *FractalTreeGrammar) Rule0DrawingFunction(ctx *gg.Context) {
+	g.forward(ctx)
+}
+
+func (g *FractalTreeGrammar) Rule1DrawingFunction(ctx *gg.Context) {
+	g.forward(ctx)
+}
+
+func (g *FractalTreeGrammar) RuleLeftDrawingFunction(ctx *gg.Context) {
+	t := g.GetTurtle()
+	g.stack = append(g.stack, t)
+	t.Angle += g.rotationAngle
+	g.SetTurtle(t)
+}
+
+func (g *FractalTreeGrammar) RuleRightDrawingFunction(ctx *gg.Context) {
+	n := len(g.stack) - 1
+	t := g.stack[n]
+	g.stack = g.stack[:n]
+
+	t.Angle -= g.rotationAngle
+	g.SetTurtle(t)
+}

@@ -7,13 +7,6 @@ import (
 	"github.com/fogleman/gg"
 )
 
-const (
-	circleRadius float64 = 5
-	moveY        float64 = circleRadius * 2
-)
-
-
-
 /**
  * AlgaeGrammar has 2 translatables A and B and no actionables
  * A translates to AB, and B translates to A
@@ -25,12 +18,18 @@ type AlgaeGrammar struct {
 }
 
 func NewAlgaeGrammar() (*AlgaeGrammar, error) {
+	const (
+		circleRadius float64 = -5
+		moveY        float64 = circleRadius * 2
+	)
+
 	algae := &AlgaeGrammar{}
 
 	axiom := "A"
+	
 	ruleA := lsystem.NewRule('A', "AB", func(ctx *gg.Context) {
 		turtle := algae.GetTurtle()
-		turtle.Y -= moveY
+		turtle.Y += moveY
 		algae.SetTurtle(turtle)
 		ctx.DrawCircle(turtle.X, turtle.Y, circleRadius)
 		ctx.SetColor(color.White)
@@ -39,7 +38,7 @@ func NewAlgaeGrammar() (*AlgaeGrammar, error) {
 
 	ruleB := lsystem.NewRule('B', "A", func(ctx *gg.Context) {
 		turtle := algae.GetTurtle()
-		turtle.Y -= moveY
+		turtle.Y += moveY
 		algae.SetTurtle(turtle)
 		ctx.DrawCircle(turtle.X, turtle.Y, circleRadius)
 		ctx.SetColor(color.White)

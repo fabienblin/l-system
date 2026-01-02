@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"main/lsystem"
+	"math"
 
 	"fyne.io/fyne/v2/canvas"
 	"github.com/fogleman/gg"
@@ -26,7 +27,7 @@ type Binder struct {
 	canvasImage *canvas.Image
 }
 
-func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {	
+func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {
 	binder := &Binder{
 		grammar:     grammar,
 		canvasImage: canvas.NewImageFromImage(drawImage(grammar, grammar.GetAxiom())),
@@ -55,8 +56,8 @@ func drawImage(grammar lsystem.BindableGrammarInterface, symbols string) image.I
 
 func initTurtle() lsystem.Turtle {
 	return lsystem.Turtle{
-		X: float64(imageWidth)/2,
-		Y: float64(imageHeight),
-		Angle: .5,
+		X:     float64(imageWidth) / 2,
+		Y:     float64(imageHeight),
+		Angle: -math.Pi / 2,
 	}
 }
