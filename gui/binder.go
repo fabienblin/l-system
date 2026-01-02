@@ -3,11 +3,9 @@ package gui
 import (
 	"image"
 	"image/color"
-	"image/draw"
 	"main/lsystem"
 
 	"fyne.io/fyne/v2/canvas"
-	"github.com/fogleman/gg"
 )
 
 var (
@@ -43,20 +41,6 @@ func (b *Binder) OnChangedIterations(iterations float64) {
 
 func drawImage(grammar lsystem.BindableGrammarInterface) *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight))
-
-	draw.Draw(
-		img,
-		img.Bounds(),
-		&image.Uniform{backgroundColor},
-		image.Point{},
-		draw.Src,
-	)
-
-	dc := gg.NewContextForRGBA(img)
-	symbolImages := grammar.GetSymbolImages()
-	for r := range grammar.GetTranslatables() {
-		dc.DrawImageAnchored(symbolImages[r], imageWidth/2, imageHeight, 0.5, 0.5)
-	}
 
 	return img
 }

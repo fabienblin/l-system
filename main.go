@@ -12,7 +12,7 @@ import (
 func main() {
 	app := app.New()
 
-	grammar, errGrammar := grammar.NewFractalTreeGrammar()
+	grammar, errGrammar := grammar.NewAlgaeGrammar()
 	if errGrammar != nil {
 		log.Fatal(errGrammar.Error())
 	}

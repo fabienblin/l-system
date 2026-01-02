@@ -5,8 +5,7 @@ const (
 )
 
 type DisplayableInterface interface {
-	GetSymbolImages() SymbolImage
-	GetTurtle() (Turtle)
+	GetTurtle() Turtle
 	SetIterations(int)
 }
 
@@ -23,22 +22,15 @@ type Turtle struct {
  * Use this strcut by composition to easly implement DisplayableInterface
  */
 type Displayable struct {
-	Displayables SymbolImage
-	Turtle       Turtle
-	Iterations   int
+	Turtle     Turtle
+	Iterations int
 }
 
-func NewDisplayable(symbolImage SymbolImage) *Displayable {
-	return &Displayable{
-		Displayables: symbolImage,
-	}
+func NewDisplayable() *Displayable {
+	return &Displayable{}
 }
 
-func (d *Displayable) GetSymbolImages() SymbolImage {
-	return d.Displayables
-}
-
-func (d *Displayable) GetTurtlePosition() (Turtle) {
+func (d *Displayable) GetTurtle() Turtle {
 	return d.Turtle
 }
 
