@@ -26,11 +26,7 @@ type Binder struct {
 	canvasImage *canvas.Image
 }
 
-func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {
-	grammar.GetTurtle().Angle = 0.5
-	grammar.GetTurtle().X = float64(imageWidth)/2
-	grammar.GetTurtle().Y = float64(imageHeight)
-	
+func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {	
 	return &Binder{
 		grammar:     grammar,
 		canvasImage: canvas.NewImageFromImage(drawImage(grammar, grammar.GetAxiom())),
@@ -38,7 +34,7 @@ func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {
 }
 
 func (b *Binder) OnChangedIterations(iterations float64) {
-	b.grammar.SetIterations(int(iterations))
+	b.grammar.SetTurtle(initTurtle())
 	symbols := lsystem.IterateTranslationOnGrammar(int(iterations), b.grammar)
 	b.canvasImage.Image = drawImage(b.grammar, symbols)
 	b.canvasImage.Refresh()
@@ -48,8 +44,16 @@ func drawImage(grammar lsystem.BindableGrammarInterface, symbols string) image.I
 	drawingContext := gg.NewContext(imageWidth, imageHeight)
 
 	for _, symbol := range symbols {
-		grammar.GetRule(symbol).DrawingFunc(grammar.GetTurtle(), drawingContext)
+		grammar.GetRule(symbol).DrawingFunc(drawingContext)
 	}
 
 	return drawingContext.Image()
+}
+
+func initTurtle() lsystem.Turtle {
+	return lsystem.Turtle{
+		X: float64(imageWidth)/2,
+		Y: float64(imageHeight),
+		Angle: .5,
+	}
 }

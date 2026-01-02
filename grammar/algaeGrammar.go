@@ -1,6 +1,7 @@
 package grammar
 
 import (
+	"image/color"
 	"main/lsystem"
 
 	"github.com/fogleman/gg"
@@ -8,8 +9,10 @@ import (
 
 const (
 	circleRadius float64 = 5
-	moveY float64 = circleRadius*2
+	moveY        float64 = circleRadius * 2
 )
+
+
 
 /**
  * AlgaeGrammar has 2 translatables A and B and no actionables
@@ -25,14 +28,21 @@ func NewAlgaeGrammar() (*AlgaeGrammar, error) {
 	algae := &AlgaeGrammar{}
 
 	axiom := "A"
-	ruleA := lsystem.NewRule('A', "AB", func(turtle *lsystem.Turtle, ctx *gg.Context) {
-		ctx.DrawCircle(turtle.X, turtle.Y, circleRadius)
+	ruleA := lsystem.NewRule('A', "AB", func(ctx *gg.Context) {
+		turtle := algae.GetTurtle()
 		turtle.Y -= moveY
+		algae.SetTurtle(turtle)
+		ctx.DrawCircle(turtle.X, turtle.Y, circleRadius)
+		ctx.SetColor(color.White)
 		ctx.Fill()
 	})
 
-	ruleB := lsystem.NewRule('B', "A", func(turtle *lsystem.Turtle, ctx *gg.Context) {
+	ruleB := lsystem.NewRule('B', "A", func(ctx *gg.Context) {
+		turtle := algae.GetTurtle()
+		turtle.Y -= moveY
+		algae.SetTurtle(turtle)
 		ctx.DrawCircle(turtle.X, turtle.Y, circleRadius)
+		ctx.SetColor(color.White)
 		ctx.Stroke()
 	})
 

@@ -43,7 +43,7 @@ func buildLeftPaneForm(binder *Binder) fyne.CanvasObject {
 }
 
 func buildRightPane(binder *Binder) fyne.CanvasObject {
-	binder.canvasImage.FillMode = canvas.ImageFillStretch
+	binder.canvasImage.FillMode = canvas.ImageFillContain
 
 	return container.NewStack(binder.canvasImage)
 }

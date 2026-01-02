@@ -6,8 +6,8 @@ type BindableGrammarInterface interface {
 }
 
 type DisplayableInterface interface {
-	GetTurtle() *Turtle
-	SetIterations(int)
+	GetTurtle() Turtle
+	SetTurtle(Turtle)
 }
 
 type Turtle struct {
@@ -18,20 +18,20 @@ type Turtle struct {
  * Use this strcut by composition to easly implement DisplayableInterface
  */
 type Displayable struct {
-	Turtle     *Turtle
-	Iterations int
+	Turtle     Turtle
 }
 
 func NewDisplayable() *Displayable {
 	return &Displayable{
-		Turtle: &Turtle{},
+		Turtle: Turtle{},
 	}
 }
 
-func (d *Displayable) GetTurtle() *Turtle {
+func (d *Displayable) GetTurtle() Turtle {
 	return d.Turtle
 }
 
-func (d *Displayable) SetIterations(iterations int) {
-	d.Iterations = iterations
+func (d *Displayable) SetTurtle(turtle Turtle) {
+	d.Turtle = turtle
 }
+
