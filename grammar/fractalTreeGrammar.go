@@ -14,8 +14,8 @@ import (
  * axiom: "0"
  */
 type FractalTreeGrammar struct {
-	lsystem.Grammar
-	lsystem.Displayable
+	lsystem.DisplayableGrammar
+
 	segmentSize   float64
 	rotationAngle float64
 	stack         []lsystem.Turtle
@@ -36,15 +36,12 @@ func NewFractalTreeGrammar() (*FractalTreeGrammar, error) {
 
 	ruleRight := lsystem.NewRule(']', "]", fractalTree.RuleRightDrawingFunction)
 
-	rules := lsystem.NewRules(rule0, rule1, ruleLeft, ruleRight)
-
-	grammar, errIntegrity := lsystem.NewGrammar(axiom, rules)
+	grammar, errIntegrity := lsystem.NewDisplayableGrammar(axiom, rule0, rule1, ruleLeft, ruleRight)
 	if errIntegrity != nil {
 		return nil, errIntegrity
 	}
 
-	fractalTree.Grammar = *grammar
-	fractalTree.Displayable = *lsystem.NewDisplayable()
+	fractalTree.DisplayableGrammar = *grammar
 
 	return fractalTree, nil
 }

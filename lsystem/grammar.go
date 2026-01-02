@@ -11,9 +11,6 @@ type GrammarInterface interface {
 	GetRules() Rules
 }
 
-/**
- * Use this strcut by composition to easly implement GrammarInterface
- */
 type Grammar struct {
 	Axiom string
 	Rules Rules

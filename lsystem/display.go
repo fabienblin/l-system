@@ -14,9 +14,6 @@ type Turtle struct {
 	X, Y, Angle float64
 }
 
-/**
- * Use this strcut by composition to easly implement DisplayableInterface
- */
 type Displayable struct {
 	Turtle     Turtle
 }

@@ -13,8 +13,7 @@ import (
  * axiom is A
  */
 type AlgaeGrammar struct {
-	lsystem.Grammar
-	lsystem.Displayable
+	lsystem.DisplayableGrammar
 }
 
 func NewAlgaeGrammar() (*AlgaeGrammar, error) {
@@ -45,15 +44,12 @@ func NewAlgaeGrammar() (*AlgaeGrammar, error) {
 		ctx.Stroke()
 	})
 
-	rules := lsystem.NewRules(ruleA, ruleB)
-
-	grammar, errIntegrity := lsystem.NewGrammar(axiom, rules)
+	grammar, errIntegrity := lsystem.NewDisplayableGrammar(axiom, ruleA, ruleB)
 	if errIntegrity != nil {
 		return nil, errIntegrity
 	}
 
-	algae.Grammar = *grammar
-	algae.Displayable = *lsystem.NewDisplayable()
+	algae.DisplayableGrammar = *grammar
 
 	return algae, nil
 }
