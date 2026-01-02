@@ -11,6 +11,8 @@ const (
 	windowName   string  = "L System"
 	windowWidth  float32 = 900
 	windowHeight float32 = 600
+	minimumIteration float64 = 0
+	maximumIteration float64 = 9
 )
 
 func BuildMainWindow(app fyne.App, binder *Binder) fyne.Window {
@@ -29,8 +31,8 @@ func BuildMainWindow(app fyne.App, binder *Binder) fyne.Window {
 }
 
 func buildLeftPaneForm(binder *Binder) fyne.CanvasObject {
-	iterationsSlider := widget.NewSlider(1, 10)
-	iterationsSlider.SetValue(1)
+	iterationsSlider := widget.NewSlider(minimumIteration, maximumIteration)
+	iterationsSlider.SetValue(minimumIteration)
 	iterationsSlider.Step = 1
 
 	iterationsSlider.OnChanged = binder.OnChangedIterations

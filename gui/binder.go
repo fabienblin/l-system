@@ -27,15 +27,18 @@ type Binder struct {
 }
 
 func NewBinder(grammar lsystem.BindableGrammarInterface) *Binder {	
-	return &Binder{
+	binder := &Binder{
 		grammar:     grammar,
 		canvasImage: canvas.NewImageFromImage(drawImage(grammar, grammar.GetAxiom())),
 	}
+	binder.OnChangedIterations(0)
+
+	return binder
 }
 
-func (b *Binder) OnChangedIterations(iterations float64) {
+func (b *Binder) OnChangedIterations(iteration float64) {
 	b.grammar.SetTurtle(initTurtle())
-	symbols := lsystem.IterateTranslationOnGrammar(int(iterations), b.grammar)
+	symbols := lsystem.IterateTranslationOnGrammar(int(iteration), b.grammar)
 	b.canvasImage.Image = drawImage(b.grammar, symbols)
 	b.canvasImage.Refresh()
 }
